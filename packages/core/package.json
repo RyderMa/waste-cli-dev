@@ -14,7 +14,7 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://npm.ekuaibao.com/"
+    "registry": "https://www.npmjs.com/"
   },
   "repository": {
     "type": "git",
