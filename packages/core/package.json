@@ -14,7 +14,7 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://www.npmjs.com/"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,6 @@
   },
   "dependencies": {
     "@waste-cli-dev/utils": "^1.0.4"
-  }
+  },
+  "gitHead": "9b8de03b506d5bc79c188081196903b6b9f5cabf"
 }
