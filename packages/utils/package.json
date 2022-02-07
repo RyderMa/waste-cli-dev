@@ -1,6 +1,6 @@
 {
   "name": "@waste-cli-dev/utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "waste-cli-dev utils",
   "author": "malujie <malujie@hosecloud.com>",
   "homepage": "https://github.com/RyderMa/waste-cli-dev#readme",
@@ -25,7 +25,5 @@
   },
   "bugs": {
     "url": "https://github.com/RyderMa/waste-cli-dev/issues"
-  },
-  "dependencies": {
   }
 }
