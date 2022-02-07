@@ -1,6 +1,6 @@
 {
   "name": "@waste-cli-dev/core",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "waste-cli-dev core",
   "author": "malujie <malujie@hosecloud.com>",
   "homepage": "https://github.com/RyderMa/waste-cli-dev#readme",
@@ -28,7 +28,7 @@
     "url": "https://github.com/RyderMa/waste-cli-dev/issues"
   },
   "dependencies": {
-    "@waste-cli-dev/utils": "^1.0.6"
+    "@waste-cli-dev/utils": "^1.0.7"
   },
   "gitHead": "a92f7cd858e8f893f915f230b41a8ac3d40bf116"
 }
