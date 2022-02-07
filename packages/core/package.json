@@ -1,6 +1,6 @@
 {
   "name": "@waste-cli-dev/core",
-  "version": "1.0.6",
+  "version": "1.0.0",
   "description": "waste-cli-dev core",
   "author": "malujie <malujie@hosecloud.com>",
   "homepage": "https://github.com/RyderMa/waste-cli-dev#readme",
@@ -14,7 +14,8 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -29,5 +30,5 @@
   "dependencies": {
     "@waste-cli-dev/utils": "^1.0.6"
   },
-  "gitHead": "ea1ec31919578df313ffba61bab83ebc04c376a5"
+  "gitHead": "a92f7cd858e8f893f915f230b41a8ac3d40bf116"
 }
