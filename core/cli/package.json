@@ -5,7 +5,10 @@
   "author": "malujie <malujie@hosecloud.com>",
   "homepage": "https://github.com/RyderMa/waste-cli-dev#readme",
   "license": "ISC",
-  "main": "lib/core.js",
+  "main": "lib/index.js",
+  "bin": {
+    "waste-cli-dev": "bin/index.js"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -28,7 +31,10 @@
     "url": "https://github.com/RyderMa/waste-cli-dev/issues"
   },
   "dependencies": {
-    "@waste-cli-dev/utils": "^1.0.7"
+    "@waste-cli-dev/utils": "file:../../utils/utils",
+    "@waste-cli-dev/log": "file:../../utils/log",
+    "import-local": "^3.1.0",
+    "npmlog": "^6.0.1"
   },
   "gitHead": "a92f7cd858e8f893f915f230b41a8ac3d40bf116"
 }
