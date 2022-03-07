@@ -2,7 +2,9 @@
 
 const log = require('npmlog');
 
-log.level = process.env.LOG_LEVEL;
+log.level = process.env.LOG_LEVEL ?? 'info';
+log.heading = 'waste-cli'
+log.headingStyle = {fg: 'black', bg: 'yellow'}
 log.addLevel('success', 2000, { fg: 'green', bold: true });
 
 module.exports = log;
