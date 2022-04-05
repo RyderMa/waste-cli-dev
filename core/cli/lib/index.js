@@ -7,6 +7,7 @@ const log = require('@waste-cli-dev/log');
 const colors = require('colors/safe');
 const semver = require('semver');
 const userHome = require('user-home');
+const commander = require('commander');
 const pathExists = require('path-exists').sync;
 
 const pkg = require('../package.json');
@@ -15,18 +16,45 @@ const { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } = require('./constant');
 let argv = {},
   config;
 
+const program = new commander.Command();
+
 function core() {
   try {
     checkVersion();
     checkNodeVersion();
     checkRoot();
     checkUserHome();
-    checkInputArgs();
+    // checkInputArgs();
     checkEnv();
-    log.verbose('debug', 'test debug log');
+    regitsterCommand();
   } catch (error) {
     log.error(error.message);
   }
+}
+
+function regitsterCommand() {
+  program
+    .name(Object.keys(pkg.bin)?.[0])
+    .usage('<command> [options]')
+    .version(pkg.version)
+    .option('-d  --debug', '是否开启调试模式');
+
+  program.on('option:debug', () => {
+    if (program.opts().debug) {
+      process.env.LOG_LEVEL = 'verbose';
+    } else {
+      process.env.LOG_LEVEL = 'info';
+    }
+    log.level = process.env.LOG_LEVEL;
+    log.verbose('debug', 'test debug log');
+  });
+
+  program.on('command:*', (obj) => {
+    console.log(colors.red(`未知的命令: ${obj[0]}`))
+    console.log(colors.green(`试试这些命名: ${program.options.map(item => item.long).join(', ')}`));
+  })
+
+  program.parse(process.argv);
 }
 
 function checkEnv() {
@@ -77,7 +105,7 @@ function checkUserHome() {
 
 function checkRoot() {
   const rootCheck = require('root-check');
-  console.log(rootCheck());
+  // console.log(rootCheck());
 }
 
 function checkVersion() {
