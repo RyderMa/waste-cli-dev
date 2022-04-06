@@ -33,6 +33,7 @@
   "dependencies": {
     "@waste-cli-dev/log": "file:../../utils/log",
     "@waste-cli-dev/utils": "file:../../utils/utils",
+    "@waste-cli-dev/init": "file:../../commands/init",
     "colors": "^1.4.0",
     "commander": "^9.1.0",
     "dotenv": "^16.0.0",

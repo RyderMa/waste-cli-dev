@@ -1,0 +1,29 @@
+{
+  "name": "@waste-cli-dev/init",
+  "version": "1.0.0",
+  "description": "cli init function",
+  "author": "马鲁杰 <malujie@hosecloud.com>",
+  "homepage": "https://github.com/RyderMa/waste-cli-dev#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.ekuaibao.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyderMa/waste-cli-dev.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/RyderMa/waste-cli-dev/issues"
+  }
+}

@@ -17,6 +17,7 @@ let argv = {},
   config;
 
 const program = new commander.Command();
+const init = require('@waste-cli-dev/init') 
 
 function core() {
   try {
@@ -39,6 +40,8 @@ function regitsterCommand() {
     .version(pkg.version)
     .option('-d  --debug', '是否开启调试模式');
 
+  program.command('init [projectName]').option('-f --force', '强制覆盖').action(init);
+
   program.on('option:debug', () => {
     if (program.opts().debug) {
       process.env.LOG_LEVEL = 'verbose';
@@ -50,11 +53,21 @@ function regitsterCommand() {
   });
 
   program.on('command:*', (obj) => {
-    console.log(colors.red(`未知的命令: ${obj[0]}`))
-    console.log(colors.green(`试试这些命名: ${program.options.map(item => item.long).join(', ')}`));
-  })
+    console.log(colors.red(`未知的命令: ${obj[0]}`));
+    console.log(
+      colors.green(
+        `试试这些命令: ${program.commands
+          .map((item) => item?.name())
+          .join(', ')}`
+      )
+    );
+  });
 
   program.parse(process.argv);
+
+  if (program.args?.length < 1) {
+    program.outputHelp();
+  }
 }
 
 function checkEnv() {
