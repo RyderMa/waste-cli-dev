@@ -11,23 +11,21 @@ const commander = require('commander');
 const pathExists = require('path-exists').sync;
 
 const pkg = require('../package.json');
-const { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } = require('./constant');
+const {
+  LOWEST_NODE_VERSION,
+  DEFAULT_CLI_HOME,
+  NPM_NAME,
+} = require('./constant');
 
 let argv = {},
   config;
 
 const program = new commander.Command();
-const init = require('@waste-cli-dev/init') 
+const init = require('@waste-cli-dev/init');
 
-function core() {
+async function core() {
   try {
-    checkVersion();
-    checkNodeVersion();
-    checkRoot();
-    checkUserHome();
-    // checkInputArgs();
-    checkEnv();
-    regitsterCommand();
+    await prepare();
   } catch (error) {
     log.error(error.message);
   }
@@ -38,9 +36,13 @@ function regitsterCommand() {
     .name(Object.keys(pkg.bin)?.[0])
     .usage('<command> [options]')
     .version(pkg.version)
-    .option('-d  --debug', '是否开启调试模式');
+    .option('-d  --debug', '是否开启调试模式')
+    .option('-tp --targetPath <targetPath>', '是否指定本地调试文件路径', '');
 
-  program.command('init [projectName]').option('-f --force', '强制覆盖').action(init);
+  program
+    .command('init [projectName]')
+    .option('-f --force', '强制覆盖')
+    .action(init);
 
   program.on('option:debug', () => {
     if (program.opts().debug) {
@@ -50,6 +52,13 @@ function regitsterCommand() {
     }
     log.level = process.env.LOG_LEVEL;
     log.verbose('debug', 'test debug log');
+  });
+
+  program.on('option:targetPath', () => {
+    if (program.opts().targetPath) {
+      // init command 使用
+      process.env.CLI_TARGET_PATH = program.opts().targetPath;
+    }
   });
 
   program.on('command:*', (obj) => {
@@ -70,6 +79,16 @@ function regitsterCommand() {
   }
 }
 
+async function prepare() {
+  checkVersion();
+  checkNodeVersion();
+  checkRoot();
+  checkUserHome();
+  checkEnv();
+  regitsterCommand();
+  await checkGlobalUpdate();
+}
+
 function checkEnv() {
   const dotenv = require('dotenv');
   const dotenvPath = path.resolve(userHome, '.env');
@@ -80,7 +99,6 @@ function checkEnv() {
     });
   }
   createDefaultConfig();
-  log.verbose('环境变量', config);
 }
 
 function createDefaultConfig() {
@@ -95,21 +113,6 @@ function createDefaultConfig() {
   process.env.CLI_HOME_PATH = cliConfig.cliHome;
 }
 
-function checkInputArgs() {
-  const minimist = require('minimist');
-  argv = minimist(process.argv.slice(2));
-  checkArgs();
-}
-
-function checkArgs() {
-  if (argv.debug) {
-    process.env.LOG_LEVEL = 'verbose';
-  } else {
-    process.env.LOG_LEVEL = 'info';
-  }
-  log.level = process.env.LOG_LEVEL;
-}
-
 function checkUserHome() {
   if (!userHome || !pathExists(userHome)) {
     throw new Error(colors.red('当前登录用户主目录不存在!'));
@@ -118,7 +121,7 @@ function checkUserHome() {
 
 function checkRoot() {
   const rootCheck = require('root-check');
-  // console.log(rootCheck());
+  rootCheck()
 }
 
 function checkVersion() {
@@ -134,4 +137,13 @@ function checkNodeVersion() {
       )
     );
   }
+}
+
+async function checkGlobalUpdate() {
+  log.verbose('检查 waste-cli 版本');
+  const currentVersion = pkg.version;
+  // const lastVersion = await npm.getNpmLatestSemverVersion(
+  //   NPM_NAME,
+  //   currentVersion
+  // );
 }
