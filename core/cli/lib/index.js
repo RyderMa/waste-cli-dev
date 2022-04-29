@@ -9,6 +9,8 @@ const semver = require('semver');
 const userHome = require('user-home');
 const commander = require('commander');
 const pathExists = require('path-exists').sync;
+const init = require('@waste-cli-dev/init');
+const exec = require('@waste-cli-dev/exec');
 
 const pkg = require('../package.json');
 const {
@@ -21,7 +23,6 @@ let argv = {},
   config;
 
 const program = new commander.Command();
-const init = require('@waste-cli-dev/init');
 
 async function core() {
   try {
@@ -42,7 +43,7 @@ function regitsterCommand() {
   program
     .command('init [projectName]')
     .option('-f --force', '强制覆盖')
-    .action(init);
+    .action(exec);
 
   program.on('option:debug', () => {
     if (program.opts().debug) {
@@ -121,7 +122,7 @@ function checkUserHome() {
 
 function checkRoot() {
   const rootCheck = require('root-check');
-  rootCheck()
+  rootCheck();
 }
 
 function checkVersion() {
