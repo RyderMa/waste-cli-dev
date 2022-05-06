@@ -1,7 +1,7 @@
 {
-  "name": "@waste-cli-dev/package",
+  "name": "format-path",
   "version": "1.0.0",
-  "description": "waste-cli-dev npm moudles",
+  "description": "format path",
   "author": "malujie <malujie@hosecloud.com>",
   "homepage": "https://github.com/RyderMa/waste-cli-dev#readme",
   "license": "ISC",
@@ -25,11 +25,5 @@
   },
   "bugs": {
     "url": "https://github.com/RyderMa/waste-cli-dev/issues"
-  },
-  "dependencies": {
-    "@waste-cli-dev/format-path": "file:../../utils/format-path",
-    "@waste-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
-    "@waste-cli-dev/utils": "file:../../utils/utils",
-    "npminstall": "^6.1.0"
   }
 }
