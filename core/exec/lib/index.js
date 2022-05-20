@@ -7,13 +7,13 @@ const Package = require('@waste-cli-dev/package');
 
 const SETTINGS = {
   // init: '@waste-cli-dev/init',
-  init: '@imooc-cli/init',
+  // init: '@vue/reactivity',
+  init: 'dayjs',
 };
 
 const CACHE_DIR = 'dependencies';
 
-function exec() {
-  console.log('exec...');
+async function exec() {
   const homePath = process.env.CLI_HOME_PATH;
   let targetPath = process.env.CLI_TARGET_PATH;
   let storeDir = '';
@@ -25,7 +25,7 @@ function exec() {
   const cmdObj = arguments[arguments.length - 1];
   const cmdName = cmdObj.name();
   const pkgName = SETTINGS[cmdName];
-  const pkgVersion = 'lastest';
+  const pkgVersion = '1.11.1'; // 默认最新版
 
   if (!targetPath) {
     targetPath = path.resolve(homePath, CACHE_DIR);
@@ -33,7 +33,7 @@ function exec() {
     storeDir = path.resolve(targetPath, 'node_modules');
 
     log.verbose('storeDir', storeDir);
-    log.verbose('targetPath', targetPath);
+    log.verbose('homePath -> targetPath', targetPath);
 
     pkg = new Package({
       pkgName,
@@ -42,12 +42,12 @@ function exec() {
       targetPath,
     });
 
-    if (pkg.exists()) {
+    if (await pkg.exists()) {
       // 更新package
-      // pkg.update();
+      pkg.update();
     } else {
       // 安装packge
-      pkg.install();
+      await pkg.install();
     }
   } else {
     pkg = new Package({
@@ -58,8 +58,9 @@ function exec() {
   }
 
   const rootFile = pkg.getRootFilePath();
-  console.log('-------------rootFile-------------', rootFile);
-  require(rootFile)?.(...arguments);
+  if (rootFile) {
+    require(rootFile)?.(...arguments);
+  }
 }
 
 module.exports = exec;

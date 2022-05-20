@@ -29,6 +29,9 @@ async function core() {
     await prepare();
   } catch (error) {
     log.error(error.message);
+    if (program.opts().debug) {
+      console.error(error);
+    }
   }
 }
 
@@ -52,7 +55,6 @@ function regitsterCommand() {
       process.env.LOG_LEVEL = 'info';
     }
     log.level = process.env.LOG_LEVEL;
-    log.verbose('debug', 'test debug log');
   });
 
   program.on('option:targetPath', () => {
