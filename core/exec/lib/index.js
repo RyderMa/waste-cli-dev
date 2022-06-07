@@ -25,7 +25,7 @@ async function exec() {
   const cmdObj = arguments[arguments.length - 1];
   const cmdName = cmdObj.name();
   const pkgName = SETTINGS[cmdName];
-  const pkgVersion = '1.11.1'; // 默认最新版
+  const pkgVersion = 'latest'; // 默认最新版
 
   if (!targetPath) {
     targetPath = path.resolve(homePath, CACHE_DIR);
@@ -44,7 +44,7 @@ async function exec() {
 
     if (await pkg.exists()) {
       // 更新package
-      pkg.update();
+      await pkg.update();
     } else {
       // 安装packge
       await pkg.install();

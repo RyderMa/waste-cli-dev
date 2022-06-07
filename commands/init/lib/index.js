@@ -7,5 +7,5 @@ function init(projectName, options, command) {
     console.log('force ...');
   }
   // TODO
-  console.log('init ...', options, process.env.CLI_TARGET_PATH);
+  console.log('init ...', projectName, options, process.env.CLI_TARGET_PATH);
 }

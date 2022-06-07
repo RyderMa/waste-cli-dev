@@ -70,6 +70,7 @@ class Package {
 
   // plugin安装
   async install() {
+    // TODO: 已经存在最新包或者高版本包 传入低版本时的兼容
     await this.prepare();
 
     return npmInstall({
@@ -83,14 +84,13 @@ class Package {
   // plugin更新
   async update() {
     await this.prepare();
-    console.log('updating...');
     const latestPkgVersion = await getNpmLastesVerion(this.pkgName);
     const latestPkgCacheFilePath =
       this.getSpecifyPkgCacheFilePath(latestPkgVersion);
 
     if (!pathExistsSync(latestPkgCacheFilePath)) {
       // 删除旧包
-      fsExtra.removeSync(this.pkgCacheFilePath)
+      fsExtra.removeSync(this.pkgCacheFilePath);
       return npmInstall({
         root: this.targetPath,
         storeDir: this.storeDir,
@@ -104,20 +104,28 @@ class Package {
 
   // 获取入口文件的路径
   getRootFilePath() {
-    // 获取package.json所在目录
-    const dir = formatPath(pkgDir(this.targetPath));
+    const _getRootFile = (targetPath) => {
+      // 获取package.json所在目录
+      const dir = pkgDir(targetPath);
 
-    if (dir) {
-      // 读取package.json
-      const pkgFile = require(`${path.resolve(dir, 'package.json')}`);
-      // 寻找 main/lib
-      if (pkgFile?.main) {
-        // 路径平台兼容
-        return formatPath(path.resolve(dir, pkgFile.main));
+      if (dir) {
+        // 读取package.json
+        const pkgFile = require(`${path.resolve(dir, 'package.json')}`);
+        // 寻找 main/lib
+        if (pkgFile?.main) {
+          // 路径平台兼容
+          return formatPath(path.resolve(dir, pkgFile.main));
+        }
       }
-    }
 
-    return null;
+      return null;
+    };
+
+    if (this.storeDir) {
+      return _getRootFile(this.pkgCacheFilePath);
+    } else {
+      return _getRootFile(this.targetPath);
+    }
   }
 }
 
