@@ -14,7 +14,6 @@ const exec = require('@waste-cli-dev/exec');
 
 const pkg = require('../package.json');
 const {
-  LOWEST_NODE_VERSION,
   DEFAULT_CLI_HOME,
   NPM_NAME,
 } = require('./constant');
@@ -84,7 +83,6 @@ function regitsterCommand() {
 
 async function prepare() {
   checkVersion();
-  checkNodeVersion();
   checkRoot();
   checkUserHome();
   checkEnv();
@@ -129,17 +127,6 @@ function checkRoot() {
 
 function checkVersion() {
   log.notice('version', pkg.version);
-}
-
-function checkNodeVersion() {
-  const currentNodeVersion = process.version;
-  if (!semver.gte(currentNodeVersion, LOWEST_NODE_VERSION)) {
-    throw new Error(
-      colors.red(
-        `waste-cli 需要安装 v${LOWEST_NODE_VERSION} 以上版本的 Node.js`
-      )
-    );
-  }
 }
 
 async function checkGlobalUpdate() {

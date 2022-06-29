@@ -25,5 +25,8 @@
   },
   "bugs": {
     "url": "https://github.com/RyderMa/waste-cli-dev/issues"
+  },
+  "dependencies": {
+    "@waste-cli-dev/command": "file:../../models/command"
   }
 }
