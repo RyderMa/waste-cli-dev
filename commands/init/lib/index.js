@@ -1,12 +1,14 @@
 'use strict';
 
-
+const log = require('@waste-cli-dev/log')
 const Command = require('@waste-cli-dev/command')
 
 class InitCommand extends Command {
   init() {
-    // this.projectName = this._argv[0] ?? ''
-    // this.force = this._argv[1]?.force
+    this.projectName = this._argv[0] ?? ''
+    this.force = this._argv[1]?.force
+    log.verbose('projectName', this.projectName)
+    log.verbose('force', this.force)
   }
 }
 
