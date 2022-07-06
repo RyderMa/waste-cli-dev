@@ -2,6 +2,7 @@
 
 const path = require('path');
 
+const cp = require('child_process');
 const log = require('@waste-cli-dev/log');
 const Package = require('@waste-cli-dev/package');
 
@@ -60,11 +61,51 @@ async function exec() {
   const rootFile = pkg.getRootFilePath();
   if (rootFile) {
     try {
-      require(rootFile)?.call(null, Array.from((arguments)));
+      const args = Array.from(arguments);
+      const cmd = args.pop();
+      const filterCmd = Object.create(null);
+
+      Object.keys(cmd).forEach((key) => {
+        if (
+          cmd.hasOwnProperty(key) &&
+          !key.startsWith('_') &&
+          key !== 'parent'
+        ) {
+          filterCmd[key] = cmd[key];
+        }
+      });
+      args.push(filterCmd);
+
+      const code = `require('${rootFile}').call(null, ${JSON.stringify(args)})`;
+      // 子进程 多核利用
+      const child = cp.spawn('node', ['-e', code], {
+        cwd: process.cwd(),
+        stdio: 'inherit',
+      });
+
+      child.on('error', (err) => {
+        log.error(err);
+        process.exit(1);
+      });
+
+      child.on('exit', (code, signal) => {
+        log.verbose('命令执行成功', code, signal);
+        process.exit(code);
+      });
     } catch (error) {
-      log.error(error)
+      log.error(error);
     }
   }
 }
+
+// function spawn(command, args, options = {}) {
+//   const win32 = process.platform === 'win32';
+
+//   const cmd = win32 ? 'cmd' : command;
+//   const cmdArgs = win32 ? ['/c'].concat(command, args) : args;
+//   console.log('cmd', cmd);
+//   console.log('cmdArgs', cmdArgs);
+//   return cp.spawn(command, cmdArgs, options);
+// }
 
 module.exports = exec;
