@@ -51,6 +51,14 @@ async function exec() {
       await pkg.install();
     }
   } else {
+    // correct windows cmd path
+    if (!targetPath.includes(':')) {
+      const pathList = targetPath.split('/');
+      pathList.shift();
+      const first = pathList.shift();
+      targetPath = first.toLocaleUpperCase() + ':/' + a.join('/');
+    }
+
     pkg = new Package({
       pkgName,
       pkgVersion,
