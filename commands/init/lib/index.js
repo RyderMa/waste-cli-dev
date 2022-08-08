@@ -3,6 +3,7 @@
 const log = require('@waste-cli-dev/log');
 const Command = require('@waste-cli-dev/command');
 const fs = require('fs');
+const semver = require('semver');
 const fsExtra = require('fs-extra');
 const inquirer = require('inquirer');
 
@@ -101,12 +102,19 @@ class InitCommand extends Command {
           name: 'name',
           message: '请输入项目名称',
 
-          validate: (val) => {
-            const reg = /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/;
-            if (!reg.test(val)) return '文件名不合规';
-            return true
+          validate(val) {
+            const reg =
+              /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/;
+            const done = this.async();
+            setTimeout(function () {
+              if (!reg.test(val)) {
+                done('文件名不合法');
+                return;
+              }
+              done(null, true);
+            }, 0);
           },
-          filter: (val) => {
+          filter(val) {
             return val.trim();
           },
         },
@@ -114,12 +122,20 @@ class InitCommand extends Command {
           type: 'input',
           name: 'version',
           message: '请输入项目版本号',
-          validate: (val) => {
-            if(!val.includes('.')) return '版本号不合规'
-            return typeof val === 'string';
+          validate(val) {
+            const done = this.async();
+            setTimeout(function () {
+              if (!semver.valid(val)) {
+                done('版本号不合规');
+                return;
+              }
+              done(null, true);
+            }, 0);
           },
-          filter: (val) => {
-            return val.trim();
+          filter(val) {
+            const formatVal = semver.valid(val);
+            if (formatVal) return formatVal;
+            return val;
           },
         },
       ]);
