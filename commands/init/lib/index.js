@@ -20,10 +20,12 @@ class InitCommand extends Command {
 
   async exec() {
     try {
-      const ret = await this.prepare();
-      console.log('exec', ret);
-      if (ret) {
+      const projectInfo = await this.prepare();
+
+      if (projectInfo) {
+        log.verbose('projectInfo', projectInfo);
         // 下载模板
+        this.downloadTemplate();
         // 安装模板
       }
     } catch (error) {
@@ -32,9 +34,9 @@ class InitCommand extends Command {
   }
 
   async prepare() {
-    // 判断当前目录是否为空
     const localPath = process.cwd(); // or path.resolve('.')
 
+    // 判断当前目录是否为空
     if (!this.isDirEmpty(localPath)) {
       let isContinue = false;
 
@@ -75,11 +77,11 @@ class InitCommand extends Command {
       }
     }
 
-    const projectType = await this.getProjectInfo();
+    return this.getProjectInfo();
   }
 
   async getProjectInfo() {
-    const projectInfo = {};
+    let projectInfo = {};
     // 选择创建的项目和组件
     const typeAnswer = await inquirer.prompt({
       name: 'type',
@@ -101,7 +103,6 @@ class InitCommand extends Command {
           type: 'input',
           name: 'name',
           message: '请输入项目名称',
-
           validate(val) {
             const reg =
               /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/;
@@ -121,6 +122,7 @@ class InitCommand extends Command {
         {
           type: 'input',
           name: 'version',
+          default: '1.0.0',
           message: '请输入项目版本号',
           validate(val) {
             const done = this.async();
@@ -139,6 +141,10 @@ class InitCommand extends Command {
           },
         },
       ]);
+      projectInfo = {
+        type,
+        ...info,
+      };
     } else if (type === TYPE_COMPONENT) {
     }
 
@@ -156,6 +162,8 @@ class InitCommand extends Command {
 
     return !fileList || fileList.length < 1;
   }
+
+  downloadTemplate() {}
 }
 
 function init(argv) {

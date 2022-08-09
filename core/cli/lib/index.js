@@ -6,17 +6,14 @@ const path = require('path');
 const log = require('@waste-cli-dev/log');
 const colors = require('colors/safe');
 const semver = require('semver');
-const userHome = require('user-home');
+const { homedir } = require('os');
 const commander = require('commander');
 const pathExists = require('path-exists').sync;
 const init = require('@waste-cli-dev/init');
 const exec = require('@waste-cli-dev/exec');
 
 const pkg = require('../package.json');
-const {
-  DEFAULT_CLI_HOME,
-  NPM_NAME,
-} = require('./constant');
+const { DEFAULT_CLI_HOME, NPM_NAME } = require('./constant');
 
 let argv = {},
   config;
@@ -92,7 +89,7 @@ async function prepare() {
 
 function checkEnv() {
   const dotenv = require('dotenv');
-  const dotenvPath = path.resolve(userHome, '.env');
+  const dotenvPath = path.resolve(homedir(), '.env');
 
   if (pathExists(dotenvPath)) {
     config = dotenv.config({
@@ -104,18 +101,18 @@ function checkEnv() {
 
 function createDefaultConfig() {
   const cliConfig = {
-    home: userHome,
+    home: homedir(),
   };
   if (process.env.CLI_HOME) {
-    cliConfig.cliHome = path.join(userHome, process.env.CLI_HOME);
+    cliConfig.cliHome = path.join(homedir(), process.env.CLI_HOME);
   } else {
-    cliConfig.cliHome = path.join(userHome, DEFAULT_CLI_HOME);
+    cliConfig.cliHome = path.join(homedir(), DEFAULT_CLI_HOME);
   }
   process.env.CLI_HOME_PATH = cliConfig.cliHome;
 }
 
 function checkUserHome() {
-  if (!userHome || !pathExists(userHome)) {
+  if (!homedir() || !pathExists(homedir())) {
     throw new Error(colors.red('当前登录用户主目录不存在!'));
   }
 }
