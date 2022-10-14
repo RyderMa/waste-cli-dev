@@ -6,6 +6,7 @@ const fs = require('fs');
 const semver = require('semver');
 const fsExtra = require('fs-extra');
 const inquirer = require('inquirer');
+const getTemplate = require('./getTemplate');
 
 const TYPE_PROJECT = 'porject';
 const TYPE_COMPONENT = 'component';
@@ -21,6 +22,7 @@ class InitCommand extends Command {
   async exec() {
     try {
       const projectInfo = await this.prepare();
+      this.projectInfo = projectInfo;
 
       if (projectInfo) {
         log.verbose('projectInfo', projectInfo);
@@ -34,6 +36,14 @@ class InitCommand extends Command {
   }
 
   async prepare() {
+    // 判断项目模板是否存在
+    const templates = await getTemplate();
+
+    if (!templates?.length) {
+      throw new Error('项目模板不存在');
+    }
+    this.templates = templates;
+
     const localPath = process.cwd(); // or path.resolve('.')
 
     // 判断当前目录是否为空

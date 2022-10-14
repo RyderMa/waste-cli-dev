@@ -1,8 +1,8 @@
 {
-  "name": "@waste-cli-dev/init",
+  "name": "@waste-cli-dev/request",
   "version": "1.0.0",
-  "description": "cli init function",
-  "author": "马鲁杰 <malujie@hosecloud.com>",
+  "description": "> TODO: description",
+  "author": "malujie <malujie@hosecloud.com>",
   "homepage": "https://github.com/RyderMa/waste-cli-dev#readme",
   "license": "ISC",
   "main": "lib/index.js",
@@ -14,7 +14,7 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://npm.ekuaibao.com/"
+    "registry": "http://npm.ekuaibao.com/"
   },
   "repository": {
     "type": "git",
@@ -27,11 +27,6 @@
     "url": "https://github.com/RyderMa/waste-cli-dev/issues"
   },
   "dependencies": {
-    "@waste-cli-dev/command": "file:../../models/command",
-    "@waste-cli-dev/request": "file:../../utils/request",
-    "@waste-cli-dev/log": "file:../../utils/log",
-    "fs-extra": "^10.1.0",
-    "inquirer": "^8.2.4",
-    "semver": "^7.3.7"
+    "axios": "^0.27.2"
   }
 }
