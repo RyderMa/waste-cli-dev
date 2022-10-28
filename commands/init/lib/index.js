@@ -150,7 +150,15 @@ class InitCommand extends Command {
             return val;
           },
         },
+        {
+          name: 'projectTemplate',
+          type: 'list',
+          default: '',
+          message: '请选择项目模板',
+          choices: this.createTemplatesChoices(),
+        },
       ]);
+
       projectInfo = {
         type,
         ...info,
@@ -174,6 +182,15 @@ class InitCommand extends Command {
   }
 
   downloadTemplate() {}
+
+  createTemplatesChoices() {
+    if(!this.templates) return []
+
+    return this.templates.map((temp) => ({
+      name: temp.name,
+      value: temp.npmName,
+    }))
+  }
 }
 
 function init(argv) {
