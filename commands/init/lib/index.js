@@ -198,7 +198,7 @@ function init(argv) {
   // if (options.force) {
   //   console.log('force ...');
   // }
-  // // TODO
+  // TODO
   // console.log('init ...', projectName, options, process.env.CLI_TARGET_PATH);
 }
 
