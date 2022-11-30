@@ -19,7 +19,7 @@ class Command {
 			throw new Error('初始化参数数组为空');
 		}
     this._argv = argv;
-    const runner = new Promise((resovle, reject) => {
+    const runner = new Promise(() => {
       let chain = Promise.resolve();
       chain = chain.then(() => this.checkNodeVersion());
       chain = chain.then(() => this.initArgs());

@@ -5,7 +5,6 @@ module.exports = core;
 const path = require('path');
 const log = require('@waste-cli-dev/log');
 const colors = require('colors/safe');
-const semver = require('semver');
 const { homedir } = require('os');
 const commander = require('commander');
 const pathExists = require('path-exists').sync;

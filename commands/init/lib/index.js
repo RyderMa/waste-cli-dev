@@ -1,11 +1,14 @@
 'use strict';
 
-const log = require('@waste-cli-dev/log');
-const Command = require('@waste-cli-dev/command');
 const fs = require('fs');
+const path = require('path');
 const semver = require('semver');
 const fsExtra = require('fs-extra');
 const inquirer = require('inquirer');
+const userHome = require('user-home');
+const log = require('@waste-cli-dev/log');
+const Command = require('@waste-cli-dev/command');
+const Package = require('@waste-cli-dev/package');
 const getTemplate = require('./getTemplate');
 
 const TYPE_PROJECT = 'porject';
@@ -163,8 +166,7 @@ class InitCommand extends Command {
         type,
         ...info,
       };
-    } else if (type === TYPE_COMPONENT) {
-    }
+    } else if (type === TYPE_COMPONENT) {}
 
     return projectInfo;
   }
@@ -181,15 +183,28 @@ class InitCommand extends Command {
     return !fileList || fileList.length < 1;
   }
 
-  downloadTemplate() {}
+  downloadTemplate() {
+    const { projectTemplate } = this.projectInfo
+    const templateInfo = this.templates.find(temp => temp.npmName === projectTemplate)
+
+    const targetPath = path.resolve(userHome, '.waste-cli-dev', 'templates')
+    const storeDir = path.resolve(userHome, '.waste-cli-dev', 'templates', 'node_modules')
+
+    const pkg = new Package({
+      pkgName: templateInfo?.npmName,
+      version: templateInfo?.version,
+      storeDir, 
+      targetPath
+    })
+  }
 
   createTemplatesChoices() {
-    if(!this.templates) return []
+    if (!this.templates) return [];
 
     return this.templates.map((temp) => ({
       name: temp.name,
       value: temp.npmName,
-    }))
+    }));
   }
 }
 
