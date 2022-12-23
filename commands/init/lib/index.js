@@ -40,7 +40,17 @@ class InitCommand extends Command {
 
   async prepare() {
     // 判断项目模板是否存在
-    const templates = await getTemplate();
+    // const templates = await getTemplate();
+    const templates = [
+      {
+        _id: '632abe1cc3196c82d6169371',
+        name: 'vue3标准版',
+        npmName: 'waste-cli-templeate-vue',
+        version: '^1.0.0',
+        createdAt: '2022-09-21T07:32:44.214Z',
+        __v: 0,
+      },
+    ];
 
     if (!templates?.length) {
       throw new Error('项目模板不存在');
@@ -166,7 +176,8 @@ class InitCommand extends Command {
         type,
         ...info,
       };
-    } else if (type === TYPE_COMPONENT) {}
+    } else if (type === TYPE_COMPONENT) {
+    }
 
     return projectInfo;
   }
@@ -184,18 +195,25 @@ class InitCommand extends Command {
   }
 
   downloadTemplate() {
-    const { projectTemplate } = this.projectInfo
-    const templateInfo = this.templates.find(temp => temp.npmName === projectTemplate)
+    const { projectTemplate } = this.projectInfo;
+    const templateInfo = this.templates.find(
+      (temp) => temp.npmName === projectTemplate
+    );
 
-    const targetPath = path.resolve(userHome, '.waste-cli-dev', 'templates')
-    const storeDir = path.resolve(userHome, '.waste-cli-dev', 'templates', 'node_modules')
+    const targetPath = path.resolve(userHome, '.waste-cli-dev', 'templates');
+    const storeDir = path.resolve(
+      userHome,
+      '.waste-cli-dev',
+      'templates',
+      'node_modules'
+    );
 
     const pkg = new Package({
       pkgName: templateInfo?.npmName,
       version: templateInfo?.version,
-      storeDir, 
-      targetPath
-    })
+      storeDir,
+      targetPath,
+    });
   }
 
   createTemplatesChoices() {
